@@ -32,7 +32,7 @@ poetry install
 ## Running the App
 
 ```bash
-poetry run streamlit run main.py
+ streamlit run main.py
 ```
 
 The app will open at `http://localhost:8501` by default.
