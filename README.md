@@ -49,6 +49,69 @@ Queries can be tested and explored directly in the GraphDB Workbench before runn
 
 ---
 
+## Ontology & Metadata
+
+The graph preserves the relationships and key metadata from the GTFS schema, reduced to the fields needed for network analysis:
+
+```
+Stop Time ──from──> Trip ──belongs_to──> Route
+          ──at───> Stop
+```
+
+| Node Type | Field | Description |
+|---|---|---|
+| route | route_short_name | Route number, e.g. "3" |
+| route | route_description | e.g. "Capitol Hill - Downtown Seattle" |
+| stop | stop_name | e.g. "1st Ave & Spring St" |
+| stop | stop_lat | Latitude |
+| stop | stop_lon | Longitude |
+| trip | route | Route node belonging to trip |
+| trip | trip_headsign | Readable identifier, e.g. "Rainier Beach" |
+| stop_time | trip | Trip node belonging to stop time |
+| stop_time | stop | Stop node belonging to stop time |
+| stop_time | stop_sequence | Relative position of stop in trip sequence |
+| stop_time | arrival_time | When bus arrives |
+| stop_time | departure_time | When bus departs |
+
+---
+
+## ETL Pipeline 
+
+```
+1. GTFS Files        2. Data Conversion     3. Construction
+   Zipped .txt          Reformat CSV rows      Construct RDF
+   files readable        into RDF OTTR          knowledge graph
+   as CSVs              templates              in memory
+                              ↓
+                    4. Serialization       5. Deployment
+                       Write graph to        Import N-Triples
+                       N-Triples format      into graph database
+                       for sharing           or load in memory
+```
+_**ETL Workflow found here: https://github.com/madison-abshire/IMT-542-Transit-Lab**_
+
+---
+
+## Installation
+
+This project uses [Poetry](https://python-poetry.org/) for dependency management and requires **Python ≥ 3.14**.
+
+```bash
+git clone https://github.com/madison-abshire/transit_lab_visualizer.git
+cd transit_lab_visualizer
+poetry install
+```
+
+## Running the App
+
+```bash
+streamlit run main.py
+```
+
+The app opens at `http://localhost:8501` by default.
+
+---
+
 ## Why a Knowledge Graph?
 
 GTFS data is distributed as flat CSV/TXT files. These are well-structured for storage but require multiple joins to answer network questions. The FAIR assessment of the source files:
@@ -83,68 +146,6 @@ This is the strongest dimension of the knowledge graph relative to the source fi
 **Reusable**
 
 The graph schema is documented in this README and mirrors the published GTFS ontology, so the meaning of every predicate is externally defined and stable. The N-Triples file is self-contained and includes all relationships needed to reconstruct the network without the original GTFS source files. The transformation workflow can be adapted to any transit system that uses the GTFS standard.
-
----
-
-## Ontology & Metadata
-
-The graph preserves the relationships and key metadata from the GTFS schema, reduced to the fields needed for network analysis:
-
-```
-Stop Time ──from──> Trip ──belongs_to──> Route
-          ──at───> Stop
-```
-
-| Node Type | Field | Description |
-|---|---|---|
-| route | route_short_name | Route number, e.g. "3" |
-| route | route_description | e.g. "Capitol Hill - Downtown Seattle" |
-| stop | stop_name | e.g. "1st Ave & Spring St" |
-| stop | stop_lat | Latitude |
-| stop | stop_lon | Longitude |
-| trip | route | Route node belonging to trip |
-| trip | trip_headsign | Readable identifier, e.g. "Rainier Beach" |
-| stop_time | trip | Trip node belonging to stop time |
-| stop_time | stop | Stop node belonging to stop time |
-| stop_time | stop_sequence | Relative position of stop in trip sequence |
-| stop_time | arrival_time | When bus arrives |
-| stop_time | departure_time | When bus departs |
-
----
-
-## Transformation Pipeline
-
-```
-1. GTFS Files        2. Data Conversion     3. Construction
-   Zipped .txt          Reformat CSV rows      Construct RDF
-   files readable        into RDF OTTR          knowledge graph
-   as CSVs              templates              in memory
-                              ↓
-                    4. Serialization       5. Deployment
-                       Write graph to        Import N-Triples
-                       N-Triples format      into graph database
-                       for sharing           or load in memory
-```
-
----
-
-## Installation
-
-This project uses [Poetry](https://python-poetry.org/) for dependency management and requires **Python ≥ 3.14**.
-
-```bash
-git clone https://github.com/madison-abshire/transit_lab_visualizer.git
-cd transit_lab_visualizer
-poetry install
-```
-
-## Running the App
-
-```bash
-streamlit run main.py
-```
-
-The app opens at `http://localhost:8501` by default.
 
 ---
 
