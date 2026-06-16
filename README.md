@@ -6,7 +6,7 @@ Transit analysts and planners working with King County Metro schedule data need 
 
 **Core question:** How can GTFS transit schedule data be restructured to make network-level patterns directly queryable and visually explorable?
 
-_**There is a seperate project containing data preparation workflows and process documents: https://github.com/lkbrennan97/IMT-542-Transit-Lab**_
+_**ETL Workflow found here: https://github.com/madison-abshire/IMT-542-Transit-Lab**_
 
 ---
 
@@ -125,8 +125,6 @@ Stop Time ──from──> Trip ──belongs_to──> Route
                        N-Triples format      into graph database
                        for sharing           or load in memory
 ```
-
-_**The transformation workflow that produces the N-Triples file as well as process documents are available at: https://github.com/lkbrennan97/IMT-542-Transit-Lab**_
 
 ---
 
